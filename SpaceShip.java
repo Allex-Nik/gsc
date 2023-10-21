@@ -1,7 +1,5 @@
 import java.awt.*;
 
-import javax.swing.JPanel;
-
 /**
  * Describes the class for the spaceship.
  */
@@ -20,9 +18,6 @@ public class SpaceShip {
         this.y = y;
         this.width = width;
         this.height = height;
-        //this.speed = speed;
-        //this.health = health;
-        //this.ammunition = ammunition;
     }
 
     public int getX() {
@@ -48,7 +43,7 @@ public class SpaceShip {
     }
 
     public Projectile fire() {
-        return new Projectile(this);
+        return new Projectile(this.x + this.width / 2, this.y, "UP");
     }
 
     public void collectDebris() {

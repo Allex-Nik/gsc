@@ -6,6 +6,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.*;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
      * Comment.
@@ -13,9 +14,14 @@ import java.util.ArrayList;
 public class MainGameScreen extends JPanel {
     
     int score;
-    private int START_AMUNITION;
+    private int AMUNITION = 100;
+    private int HEALTH = 100;
     private SpaceShip spaceShip;
+    private List<Alien> aliens = new ArrayList<>();
+    private List<Debris> debris = new ArrayList<>();
     private List<Projectile> projectiles = new ArrayList<>();
+    private  final int SCREEN_WIDTH = 800;
+    private final int SCREEN_HEIGHT = 600;
     JFrame frame;
 
    
@@ -27,13 +33,15 @@ public class MainGameScreen extends JPanel {
         frame = new JFrame();
         this.setBackground(Color.BLACK);
 
-        spaceShip = new SpaceShip(300, 530, 50, 50);
+        spaceShip = new SpaceShip(300, 530, 50, 50);         
 
         frame.add(this);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(800, 600);
+        frame.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
         frame.setUndecorated(true);
         frame.setVisible(true);
+
+        Random random = new Random();
 
         this.addMouseMotionListener(new MouseAdapter() {
             @Override
@@ -47,30 +55,75 @@ public class MainGameScreen extends JPanel {
         this.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                if (e.getButton() == MouseEvent.BUTTON1) {
+                if (e.getButton() == MouseEvent.BUTTON1 && AMUNITION > 0) {
                     Projectile projectile = spaceShip.fire();
                     projectiles.add(projectile);
+                    AMUNITION -= 1;
                 }
             }
         });
 
-        Timer gameLoop = new Timer(16, new ActionListener() {
+        Timer alienShootTimer = new Timer(5000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                updateProjectiles();
+                for (Alien a : aliens) {
+                    Projectile projectile = a.fire();
+                    projectiles.add(projectile);
+                }
             }
         });
+        alienShootTimer.start();
 
+        Timer gameLoop = new Timer((1000 / 60), new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                updateDebris();
+                updateAliens();
+                updateProjectiles();
+                hitDetection();
+            }
+        });
         gameLoop.start();
+
+        Timer debrisTimer = new Timer(2000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Debris pieceOfDebris = new Debris(random.nextInt(SCREEN_WIDTH), 
+                    0, random.nextInt(SCREEN_WIDTH), SCREEN_HEIGHT);
+                debris.add(pieceOfDebris);
+            }
+        });
+        debrisTimer.start();
+
+        Timer aliensTimer = new Timer(10000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String direction = (random.nextInt(2) == 0) ? "LEFT" : "RIGHT";
+                int startX = (direction.equals("LEFT") ? 0 : SCREEN_WIDTH);
+                Alien alien = new Alien(startX, random.nextInt(100, 300), direction);
+                aliens.add(alien);
+            }
+        });
+        aliensTimer.start();
     }
 
-     @Override
+    @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         spaceShip.draw(g);
         for (Projectile p : projectiles) {
             p.draw(g);
         }
+        for (Debris d : debris) {
+            d.draw(g);
+        }
+        for (Alien a : aliens) {
+            a.draw(g);
+        }
+        g.setColor(Color.WHITE);
+        g.setFont(new Font("Arial", Font.BOLD, 14));
+        g.drawString("Amunition : " + AMUNITION, 10, 15);
+        g.drawString("Health: " + HEALTH, 10, 40);
     }
 
     public void updateProjectiles() {
@@ -80,6 +133,42 @@ public class MainGameScreen extends JPanel {
         repaint();
     }
 
+    public void updateDebris() {
+        for (Debris d : debris) {
+            d.move();
+        }
+        repaint();
+    }
+
+    public void updateAliens() {
+        for (Alien a : aliens) {
+            a.move();
+        }
+        repaint();
+    }
+
+    public void hitDetection() {
+        List<Projectile> projectilesToRemove = new ArrayList<>();
+        List<Alien> aliensToRemove = new ArrayList<>();
+        
+        for (Projectile p : projectiles) {
+            if (p.x < spaceShip.x + spaceShip.width & p.x + p.width > spaceShip.x
+                && p.y + p.height > spaceShip.y && p.y < spaceShip.y + spaceShip.height
+                && p.direction.equals("DOWN")) {
+                projectilesToRemove.add(p);
+                HEALTH -= 10;
+            }
+            for (Alien a : aliens) {
+                if (p.x < a.x + a.width && p.x + p.width > a.x 
+                    && p.y < a.y + a.height && p.y + p.height > a.y && p.direction.equals("UP")) {
+                    projectilesToRemove.add(p);
+                    aliensToRemove.add(a);
+                }
+            }
+        }
+        projectiles.removeAll(projectilesToRemove);
+        aliens.removeAll(aliensToRemove);
+    }
 
     public static void main(String[] args) {
         new MainGameScreen();
