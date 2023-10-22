@@ -14,6 +14,7 @@ public class SpaceShip {
     int speed = 0;
     int health;
     int ammunition;
+    Rectangle shape;
 
     public SpaceShip(int x, int y, int width, int height) {
         this.x = x;
@@ -23,6 +24,7 @@ public class SpaceShip {
         //this.speed = speed;
         //this.health = health;
         //this.ammunition = ammunition;
+        this.shape = new Rectangle(x, y, width, height);
     }
 
     public int getX() {
@@ -30,8 +32,9 @@ public class SpaceShip {
     }
 
     public void setX(int x) {
-        if (x < 725 && x > 25) {
+        if (x < 1390 && x > 480) {
             this.x = x;
+            shape.setLocation(x, y);
         }
     }
 

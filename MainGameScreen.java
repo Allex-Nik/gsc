@@ -8,32 +8,22 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Random;
 
-/**
-     * Comment.
-     */
 public class MainGameScreen extends JPanel {
-    
+
     int score;
-    private int START_AMUNITION;
+    private int START_AMMUNITION;
     private SpaceShip spaceShip;
     private Debris debris;
     private List<Projectile> projectiles = new ArrayList<>();
-    private  final int SCREEN_WIDTH = 800;
-    private final int SCREEN_HEIGHT = 600;
-    JFrame frame;
+    private final int SCREEN_WIDTH = 1980;
+    private final int SCREEN_HEIGHT = 1080;
+    JFrame frame = new JFrame();
 
-   
-
-    /**
-     * Comment.
-     */
     public MainGameScreen() {
         Random random = new Random();
-        frame = new JFrame();
-        this.setBackground(Color.BLACK);
-
-        spaceShip = new SpaceShip(300, 530, 50, 50);
-        debris = new Debris(random.nextInt(SCREEN_WIDTH), 0, random.nextInt(SCREEN_WIDTH), SCREEN_HEIGHT);
+        ImageIcon backgroundImage = new ImageIcon("Space Background.png");
+        spaceShip = new SpaceShip(900, 1000, 50, 50);
+        debris = new Debris(random.nextInt(SCREEN_WIDTH/4, SCREEN_WIDTH*3/4), 0, random.nextInt(SCREEN_WIDTH/4, SCREEN_WIDTH*3/4), SCREEN_HEIGHT);
 
         frame.add(this);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -41,7 +31,18 @@ public class MainGameScreen extends JPanel {
         frame.setUndecorated(true);
         frame.setVisible(true);
 
-        
+        this.setOpaque(true);
+        this.setBackground(Color.BLACK);
+
+        Timer gameLoop = new Timer((1000 / 60), new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                updateProjectiles();
+                updateDebris();
+                debris.collisionDetection(spaceShip);
+            }
+        });
+        gameLoop.start();
 
         this.addMouseMotionListener(new MouseAdapter() {
             @Override
@@ -61,21 +62,13 @@ public class MainGameScreen extends JPanel {
                 }
             }
         });
-
-        Timer gameLoop = new Timer((1000 / 60), new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                updateProjectiles();
-                updateDebris();
-            }
-        });
-
-        gameLoop.start();
     }
 
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
+        ImageIcon backgroundImage = new ImageIcon("Space Background.png");
+        g.drawImage(backgroundImage.getImage(), 0, 0, null);
         spaceShip.draw(g);
         for (Projectile p : projectiles) {
             p.draw(g);
@@ -95,8 +88,7 @@ public class MainGameScreen extends JPanel {
         repaint();
     }
 
-
     public static void main(String[] args) {
-        new MainGameScreen();
+        SwingUtilities.invokeLater(MainGameScreen::new);
     }
 }
