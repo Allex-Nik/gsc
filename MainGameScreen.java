@@ -8,11 +8,8 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Random;
 
-/**
-     * Comment.
-     */
 public class MainGameScreen extends JPanel {
-    
+
     int score;
     private int AMUNITION = 100;
     private int HEALTH = 100;
@@ -20,28 +17,36 @@ public class MainGameScreen extends JPanel {
     private List<Alien> aliens = new ArrayList<>();
     private List<Debris> debris = new ArrayList<>();
     private List<Projectile> projectiles = new ArrayList<>();
-    private  final int SCREEN_WIDTH = 800;
-    private final int SCREEN_HEIGHT = 600;
-    JFrame frame;
+    private final int SCREEN_WIDTH = 1920;
+    private final int SCREEN_HEIGHT = 1080;
+    JFrame frame = new JFrame();
 
-   
-
-    /**
-     * Comment.
-     */
     public MainGameScreen() {
-        frame = new JFrame();
-        this.setBackground(Color.BLACK);
-
-        spaceShip = new SpaceShip(300, 530, 50, 50);         
+        Random random = new Random();
+        ImageIcon backgroundImage = new ImageIcon("Space Background.png");
+        spaceShip = new SpaceShip(900, 1000, 50, 50);
+        debris = new Debris(random.nextInt(SCREEN_WIDTH/4, SCREEN_WIDTH*3/4), 0, random.nextInt(SCREEN_WIDTH/4, SCREEN_WIDTH*3/4), SCREEN_HEIGHT);
 
         frame.add(this);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
         frame.setUndecorated(true);
         frame.setVisible(true);
-
         Random random = new Random();
+
+        this.setOpaque(true);
+        this.setBackground(Color.BLACK);
+        
+        JPanel leftPanel = new JPanel();
+        leftPanel.setBackground(Color.BLACK);
+        leftPanel.setBounds(0, 0, 480, SCREEN_HEIGHT);
+        this.add(leftPanel);
+
+        JPanel rightPanel = new JPanel();
+        rightPanel.setBackground(Color.BLACK);
+        rightPanel.setBounds(SCREEN_WIDTH*3/4, 0, SCREEN_WIDTH/4, SCREEN_HEIGHT);
+        this.add(rightPanel);
+
 
         this.addMouseMotionListener(new MouseAdapter() {
             @Override
@@ -81,6 +86,7 @@ public class MainGameScreen extends JPanel {
                 updateAliens();
                 updateProjectiles();
                 hitDetection();
+                //Add hit-detection for Debris using debris.collisionDetection(spaceShip)
             }
         });
         gameLoop.start();
@@ -110,6 +116,8 @@ public class MainGameScreen extends JPanel {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
+        ImageIcon backgroundImage = new ImageIcon("Space Background.png");
+        g.drawImage(backgroundImage.getImage(), 0, 0, null);
         spaceShip.draw(g);
         for (Projectile p : projectiles) {
             p.draw(g);
@@ -170,7 +178,8 @@ public class MainGameScreen extends JPanel {
         aliens.removeAll(aliensToRemove);
     }
 
+
     public static void main(String[] args) {
-        new MainGameScreen();
+        SwingUtilities.invokeLater(MainGameScreen::new);
     }
 }
