@@ -10,7 +10,7 @@ public class Alien {
     public double x = 0.0;
     public double y;
     private int startY;
-    private double deltaX = 0.2;
+    private double deltaX = 0.5;
     public int width;
     public int height;
     private String direction;
