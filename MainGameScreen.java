@@ -15,7 +15,7 @@ public class MainGameScreen extends JPanel {
     private SpaceShip spaceShip;
     private Debris debris;
     private List<Projectile> projectiles = new ArrayList<>();
-    private final int SCREEN_WIDTH = 1980;
+    private final int SCREEN_WIDTH = 1920;
     private final int SCREEN_HEIGHT = 1080;
     JFrame frame = new JFrame();
 
@@ -33,6 +33,17 @@ public class MainGameScreen extends JPanel {
 
         this.setOpaque(true);
         this.setBackground(Color.BLACK);
+        
+        JPanel leftPanel = new JPanel();
+        leftPanel.setBackground(Color.BLACK);
+        leftPanel.setBounds(0, 0, 480, SCREEN_HEIGHT);
+        this.add(leftPanel);
+
+        JPanel rightPanel = new JPanel();
+        rightPanel.setBackground(Color.BLACK);
+        rightPanel.setBounds(SCREEN_WIDTH*3/4, 0, SCREEN_WIDTH/4, SCREEN_HEIGHT);
+        this.add(rightPanel);
+
 
         Timer gameLoop = new Timer((1000 / 60), new ActionListener() {
             @Override

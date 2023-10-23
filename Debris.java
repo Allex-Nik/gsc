@@ -7,8 +7,6 @@ public class Debris {
     int radius = 10;
     int speed = 1;
     int pointsWorth;
-    final int SCREEN_WIDTH = 800;
-    final int SCREEN_HEIGHT = 600;
 
     int m;
     int c;
