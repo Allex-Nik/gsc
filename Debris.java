@@ -1,6 +1,7 @@
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
 
+
 public class Debris {
     int init_x, init_y, fin_x, fin_y;
     int x, y;
@@ -13,6 +14,7 @@ public class Debris {
 
     Ellipse2D.Double shape;
     boolean visible;
+
     
     public Debris(int init_x, int init_y, int fin_x, int fin_y) {
         this.init_x = init_x;
@@ -36,7 +38,11 @@ public class Debris {
 
     public void move() {
         y += speed;
-        x = (y - c) / m;
+        try {
+            x = (y - c) / m;
+        } catch (Exception e) {
+            x = (y - c) / (m + 1);
+        }
         shape.setFrame(x, y, radius, radius);
     }
 

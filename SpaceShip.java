@@ -1,7 +1,5 @@
 import java.awt.*;
 
-import javax.swing.JPanel;
-
 /**
  * Describes the class for the spaceship.
  */
@@ -51,7 +49,7 @@ public class SpaceShip {
     }
 
     public Projectile fire() {
-        return new Projectile(this);
+        return new Projectile(this.x + this.width / 2, this.y, "UP");
     }
 
     public void collectDebris() {

@@ -2,16 +2,18 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 public class Projectile {
-    private int x;
-    private int y;
-    private int width;
-    private int height;
-    private int speed = 5;
+    public int x;
+    public int y;
+    public int width;
+    public int height;
+    private int speedShipsProjectiles = 15;
+    private int speedAlienProjectiles = 6;
+    public String direction;
 
-    public Projectile(SpaceShip ship) {
-        this.speed = speed;
-        this.x = ship.getX() + ship.getWidth() / 2;
-        this.y = ship.getY();
+    public Projectile(int startX, int startY, String direction) {
+        this.x = startX;
+        this.y = startY;
+        this.direction = direction;
         this.width = 5;
         this.height = 10;
     }
@@ -29,7 +31,11 @@ public class Projectile {
     }
 
     public void move() {
-        y -= speed;
+        if (direction.equals("DOWN")) {
+            y += speedAlienProjectiles;
+        } else if (direction.equals("UP")) {
+            y -= speedShipsProjectiles;
+        }
     }
 
     public void draw(Graphics g) {
