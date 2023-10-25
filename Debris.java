@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
+import javax.swing.ImageIcon;
 
 
 public class Debris {
@@ -12,8 +13,10 @@ public class Debris {
     int m;
     int c;
 
-    Ellipse2D.Double shape;
+    Ellipse2D.Double bounds;
     boolean visible;
+
+    Image imageDebris;
 
     
     public Debris(int initX, int initY, int finX, int finY) {
@@ -25,9 +28,12 @@ public class Debris {
         this.y = initY;
         this.visible = true;
 
+        imageDebris = new ImageIcon("Assets/Debris.png").getImage();
+        imageDebris = imageDebris.getScaledInstance(radius, radius, Image.SCALE_DEFAULT);
+
         // Make debris a shape that can have collisions
         
-        this.shape = new Ellipse2D.Double(x, y, radius, radius);
+        this.bounds = new Ellipse2D.Double(x, y, radius, radius);
     
         //Trajectory
         //y = mx + c
@@ -44,16 +50,13 @@ public class Debris {
             x = (y - c) / (m + 1);
         }
 
-        shape.setFrame(x, y, radius, radius);
+        bounds.setFrame(x, y, radius, radius);
     }
 
     public void draw(Graphics g){
-        if (visible) {
-            g.setColor(Color.WHITE);
-            g.fillOval(x, y, radius, radius);
-        } else {
-            g.dispose();
-        }
+        g.drawImage(imageDebris, x, y, null);
+        //g.setColor(Color.WHITE);
+        //g.fillOval(x, y, radius, radius);
 
     }
 
@@ -62,12 +65,6 @@ public class Debris {
     }
 
     public boolean collisionDetection(SpaceShip object) {
-        boolean collisionFlag = false;
-        if (shape.intersects(object.shape.getBounds2D())) {
-            System.out.println("Collision detected");
-            this.visible = false;
-            collisionFlag = true;
-        }
-        return collisionFlag;
+        return this.bounds.intersects(object.bounds);
     }
 }

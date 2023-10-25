@@ -21,6 +21,8 @@ public class MainGameScreen extends JPanel {
     private final int SCREEN_HEIGHT = 1080;
     JFrame frame = new JFrame();
 
+    public Image backgroundImage;
+
     public MainGameScreen() {
         spaceShip = new SpaceShip(900, 1000, 50, 50);
 
@@ -33,6 +35,9 @@ public class MainGameScreen extends JPanel {
         this.setOpaque(true);
         this.setBackground(Color.BLACK);
         Random random = new Random();
+
+        ImageIcon backgroundImageSource = new ImageIcon("Assets/Space Background.png");
+        backgroundImage = backgroundImageSource.getImage();
 
 
         this.addMouseMotionListener(new MouseAdapter() {
@@ -111,8 +116,8 @@ public class MainGameScreen extends JPanel {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        ImageIcon backgroundImage = new ImageIcon("Space Background.png");
-        g.drawImage(backgroundImage.getImage(), 0, 0, null);
+
+        g.drawImage(backgroundImage, 0, 0, null);
         spaceShip.draw(g);
         for (Projectile p : projectiles) {
             p.draw(g);
@@ -130,7 +135,6 @@ public class MainGameScreen extends JPanel {
     }
 
     
-
     public void updateProjectiles() {
         for (Projectile p : projectiles) {
             p.move();
@@ -159,20 +163,18 @@ public class MainGameScreen extends JPanel {
         List<Debris> debrisToRemove = new ArrayList<>();
         
         for (Projectile p : projectiles) {
-            if (p.x < spaceShip.x + spaceShip.width & p.x + p.width > spaceShip.x
-                && p.y + p.height > spaceShip.y && p.y < spaceShip.y + spaceShip.height
-                && p.direction.equals("DOWN")) {
+            if (spaceShip.collisionDetection(p) && p.direction.equals("DOWN")) {
                 projectilesToRemove.add(p);
                 health -= 10;
             }
             for (Alien a : aliens) {
-                if (p.x < a.x + a.width && p.x + p.width > a.x 
-                    && p.y < a.y + a.height && p.y + p.height > a.y && p.direction.equals("UP")) {
+                if (a.collisionDetection(p) && p.direction.equals("UP")) {
                     projectilesToRemove.add(p);
                     aliensToRemove.add(a);
                 }
             }
         }
+        
         for (Debris d : debris) {
             if (d.collisionDetection(spaceShip)) {
                 debrisToRemove.add(d);
@@ -183,9 +185,6 @@ public class MainGameScreen extends JPanel {
         aliens.removeAll(aliensToRemove);
         debris.removeAll(debrisToRemove);
     }
-
-
-
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(MainGameScreen::new);
