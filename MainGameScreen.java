@@ -178,6 +178,7 @@ public class MainGameScreen extends JPanel {
         for (Debris d : debris) {
             if (d.collisionDetection(spaceShip)) {
                 debrisToRemove.add(d);
+                ammunition += d.getPoints();
             }
         }
 

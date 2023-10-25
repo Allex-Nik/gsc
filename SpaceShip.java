@@ -1,8 +1,6 @@
 import java.awt.*;
 import javax.swing.ImageIcon;
 
-import org.w3c.dom.css.Rect;
-
 /**
  * Describes the class for the spaceship.
  */
@@ -26,9 +24,7 @@ public class SpaceShip {
         //this.speed = speed;
         //this.health = health;
         //this.ammunition = ammunition;
-        bounds = new Rectangle(x, y, width, height);
-
-        
+        this.bounds = new Rectangle(x, y, width, height);
 
         ImageIcon imageSpaceShipSource = new ImageIcon("Assets/SpaceShip.png");
         imageSpaceShip = imageSpaceShipSource.getImage();
@@ -41,8 +37,7 @@ public class SpaceShip {
     public void setX(int x) {
         if (x < 1390 && x > 480) {
             this.x = x;
-            this.bounds.setLocation(x, x);
-            
+            bounds.setLocation(x, y);
         }
     }
 
@@ -71,10 +66,9 @@ public class SpaceShip {
     }
 
     public void draw(Graphics g) {  
-        g.drawImage(imageSpaceShip, this.x-width/2 + 3, this.y-10, null);
+        g.drawImage(imageSpaceShip, this.x-20, this.y, null);
         g.setColor(Color.BLUE);
         g.drawRect(this.x, this.y, width, height);
-        
     }
 
     public boolean collisionDetection(Projectile p) {

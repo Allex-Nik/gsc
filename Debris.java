@@ -27,6 +27,7 @@ public class Debris {
         this.x = initX;
         this.y = initY;
         this.visible = true;
+        this.pointsWorth = 1;
 
         imageDebris = new ImageIcon("Assets/Debris.png").getImage();
         imageDebris = imageDebris.getScaledInstance(radius, radius, Image.SCALE_DEFAULT);
