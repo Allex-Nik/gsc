@@ -1,9 +1,12 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.*;
+import javax.tools.Tool;
+
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Random;
@@ -24,7 +27,7 @@ public class MainGameScreen extends JPanel {
     public Image backgroundImage;
 
     public MainGameScreen() {
-        spaceShip = new SpaceShip(900, 1000, 50, 50);
+        spaceShip = new SpaceShip();
 
         frame.add(this);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -38,7 +41,6 @@ public class MainGameScreen extends JPanel {
 
         ImageIcon backgroundImageSource = new ImageIcon("Assets/Space Background.png");
         backgroundImage = backgroundImageSource.getImage();
-
 
         this.addMouseMotionListener(new MouseAdapter() {
             @Override
@@ -85,7 +87,7 @@ public class MainGameScreen extends JPanel {
         Timer debrisTimer = new Timer(2000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Debris pieceOfDebris = new Debris(random.nextInt(SCREEN_WIDTH / 4, (SCREEN_WIDTH * 3) / 4), 0, random.nextInt(SCREEN_WIDTH / 4, (SCREEN_WIDTH * 3) / 4), SCREEN_HEIGHT);
+                Debris pieceOfDebris = new Debris();
                 debris.add(pieceOfDebris);
             }
         });
@@ -95,7 +97,7 @@ public class MainGameScreen extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String direction = (random.nextInt(2) == 0) ? "LEFT" : "RIGHT";
-                int startX = (direction.equals("LEFT") ? (SCREEN_WIDTH / 4) - 31 : ((SCREEN_WIDTH * 3) / 4) + 31);
+                int startX = (direction.equals("LEFT") ? (SCREEN_WIDTH / 4) - 51 : ((SCREEN_WIDTH * 3) / 4) + 51);
                 Alien alien = new Alien(startX, random.nextInt(100, 300), direction);
                 aliens.add(alien);
             }
@@ -104,7 +106,7 @@ public class MainGameScreen extends JPanel {
 
         JPanel leftPanel = new JPanel();
         leftPanel.setBackground(Color.BLACK);
-        leftPanel.setBounds(0, 0, 480, SCREEN_HEIGHT);
+        leftPanel.setBounds(0, 0, SCREEN_WIDTH / 4, SCREEN_HEIGHT);
         this.add(leftPanel);
 
         JPanel rightPanel = new JPanel();
@@ -132,6 +134,7 @@ public class MainGameScreen extends JPanel {
         g.setFont(new Font("Arial", Font.BOLD, 14));
         g.drawString("Amunition : " + ammunition, (SCREEN_WIDTH / 4 + 10), 15);
         g.drawString("Health: " + health, (SCREEN_WIDTH / 4 + 10), 40);
+        g.drawString("Score: " + score, (SCREEN_WIDTH / 4 + 10), 65);
     }
 
     
@@ -145,7 +148,6 @@ public class MainGameScreen extends JPanel {
     public void updateDebris() {
         for (Debris d : debris) {
             d.move();
-            System.out.println(d.x + " " + d.y);
         }
         repaint();
     }
@@ -171,6 +173,7 @@ public class MainGameScreen extends JPanel {
                 if (a.collisionDetection(p) && p.direction.equals("UP")) {
                     projectilesToRemove.add(p);
                     aliensToRemove.add(a);
+                    score += 10;
                 }
             }
         }
@@ -188,6 +191,9 @@ public class MainGameScreen extends JPanel {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(MainGameScreen::new);
+        SwingUtilities.invokeLater(() -> {
+            new MainGameScreen();
+        });
     }
 }
+

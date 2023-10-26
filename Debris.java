@@ -1,6 +1,7 @@
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
 import javax.swing.ImageIcon;
+import java.util.Random;
 
 
 public class Debris {
@@ -9,6 +10,8 @@ public class Debris {
     int radius = 10;
     int speed = 1;
     int pointsWorth;
+    final int SCREEN_WIDTH = 1920;
+    final int SCREEN_HEIGHT = 1080;
 
     int m;
     int c;
@@ -19,11 +22,12 @@ public class Debris {
     Image imageDebris;
 
     
-    public Debris(int initX, int initY, int finX, int finY) {
-        this.initX = initX;
-        this.initY = initY;
-        this.finX = finX;
-        this.finY = finY;
+    public Debris() {
+        Random random = new Random();
+        this.initX = random.nextInt(SCREEN_WIDTH / 4, (SCREEN_WIDTH * 3) / 4);
+        this.initY = 0;
+        this.finX = random.nextInt(SCREEN_WIDTH / 4, (SCREEN_WIDTH * 3) / 4);
+        this.finY = SCREEN_HEIGHT;
         this.x = initX;
         this.y = initY;
         this.visible = true;

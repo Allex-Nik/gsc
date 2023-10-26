@@ -16,11 +16,11 @@ public class SpaceShip {
     Rectangle bounds;
     Image imageSpaceShip;
 
-    public SpaceShip(int x, int y, int width, int height) {
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
+    public SpaceShip() {
+        this.x = 900;
+        this.y = 1000;
+        this.width = 50;
+        this.height = 50;
         //this.speed = speed;
         //this.health = health;
         //this.ammunition = ammunition;
