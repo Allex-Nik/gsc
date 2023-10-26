@@ -11,8 +11,13 @@ import java.util.Random;
 public class MainGameScreen extends JPanel {
 
     int score;
+
     private int ammunition = 100;
     private int health = 100;
+    private int TIME = 300;
+    private int minutes = TIME / 60;
+    private int seconds = TIME % 60;
+    Timer gameLoop;
     private SpaceShip spaceShip;
     private List<Alien> aliens = new ArrayList<>();
     private List<Debris> debris = new ArrayList<>();
@@ -71,9 +76,14 @@ public class MainGameScreen extends JPanel {
         });
         alienShootTimer.start();
 
-        Timer gameLoop = new Timer((1000 / 60), new ActionListener() {
+        gameLoop = new Timer((1000 / 60), new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if (HEALTH <= 0 || TIME <= 0) {
+                    gameLoop.stop();
+                    frame.dispose();
+                    new FinalScreen(HEALTH > 0);
+                }
                 updateDebris();
                 updateAliens();
                 updateProjectiles();
@@ -102,6 +112,7 @@ public class MainGameScreen extends JPanel {
         });
         aliensTimer.start();
 
+
         JPanel leftPanel = new JPanel();
         leftPanel.setBackground(Color.BLACK);
         leftPanel.setBounds(0, 0, 480, SCREEN_HEIGHT);
@@ -111,6 +122,17 @@ public class MainGameScreen extends JPanel {
         rightPanel.setBackground(Color.BLACK);
         rightPanel.setBounds((SCREEN_WIDTH / 4) * 3, 0, SCREEN_WIDTH / 4, SCREEN_HEIGHT);
         this.add(rightPanel);
+
+        Timer gameTimeTimer = new Timer(1000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                TIME--;
+                minutes = TIME / 60;
+                seconds = TIME % 60;
+            }
+        });
+        gameTimeTimer.start();
+
     }
 
     @Override
@@ -129,9 +151,10 @@ public class MainGameScreen extends JPanel {
             a.draw(g);
         }
         g.setColor(Color.WHITE);
-        g.setFont(new Font("Arial", Font.BOLD, 14));
+        g.setFont(new Font("Serif", Font.BOLD, 14));
         g.drawString("Amunition : " + ammunition, (SCREEN_WIDTH / 4 + 10), 15);
         g.drawString("Health: " + health, (SCREEN_WIDTH / 4 + 10), 40);
+        g.drawString(String.format("Time left: %02d:%02d", minutes, seconds), 10, 65);
     }
 
     
@@ -165,7 +188,7 @@ public class MainGameScreen extends JPanel {
         for (Projectile p : projectiles) {
             if (spaceShip.collisionDetection(p) && p.direction.equals("DOWN")) {
                 projectilesToRemove.add(p);
-                health -= 10;
+                HEALTH -= 20;
             }
             for (Alien a : aliens) {
                 if (a.collisionDetection(p) && p.direction.equals("UP")) {
@@ -186,6 +209,7 @@ public class MainGameScreen extends JPanel {
         aliens.removeAll(aliensToRemove);
         debris.removeAll(debrisToRemove);
     }
+
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(MainGameScreen::new);
