@@ -1,17 +1,27 @@
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
 import javax.swing.*;
 
-public class HomeScreen extends JFrame {
+public class HomeScreen extends JPanel {
     String gameName = "Galactic Salvage Crew";
     Color backgroundColor = new Color(102, 98, 98);
     Color titleColor = Color.BLUE;
     Color buttonColor = Color.BLUE;
+    public boolean startFlag = false;
+    Image imageSpaceShip;
+    final int SCREEN_WIDTH = 1920;
+    final int SCREEN_HEIGHT = 1080;
 
     HomeScreen() {
+        ImageIcon imageSpaceShipSource = new ImageIcon("Assets/SpaceShip.png");
+        imageSpaceShip = imageSpaceShipSource.getImage();
+
         JFrame frame = new JFrame("Home Screen");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(Toolkit.getDefaultToolkit().getScreenSize());
+        frame.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+        frame.setUndecorated(true);
         frame.setVisible(true);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
@@ -35,6 +45,23 @@ public class HomeScreen extends JFrame {
         start.setForeground(buttonColor);
         buttonPanel.add(start);
 
+        frame.addKeyListener(new KeyListener() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {;
+                    System.out.println("Escape pressed");
+                    System.exit(0);
+                }
+            }
+
+            @Override
+            public void keyTyped(KeyEvent e) {}
+
+            @Override
+            public void keyReleased(KeyEvent e) {}
+        });
+        
+
         start.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent e) {
@@ -42,7 +69,15 @@ public class HomeScreen extends JFrame {
             }
 
             @Override
-            public void mousePressed(java.awt.event.MouseEvent e) {}
+            public void mousePressed(java.awt.event.MouseEvent e) {
+                if (!startFlag) {
+                    startFlag = true;
+                    frame.dispose();
+                    SwingUtilities.invokeLater(() -> {
+                        new MainGameScreen();
+                    });
+                }
+            }
 
             @Override
             public void mouseReleased(java.awt.event.MouseEvent e) {}
@@ -63,12 +98,15 @@ public class HomeScreen extends JFrame {
                 buttonPanel.repaint();
 
             }
+
         });
 
     }
 
     public static void main(String[] args) {
-        HomeScreen homeScreen = new HomeScreen();
+        SwingUtilities.invokeLater(() -> {
+            HomeScreen homeScreen = new HomeScreen();
+        });
     }
     
 }
