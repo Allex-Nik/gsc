@@ -1,4 +1,5 @@
 import java.awt.*;
+import javax.swing.ImageIcon;
 
 /**
  * Describes the class for the spaceship.
@@ -12,12 +13,21 @@ public class SpaceShip {
     int speed = 0;
     int health;
     int ammunition;
+    Rectangle bounds;
+    Image imageSpaceShip;
 
-    public SpaceShip(int x, int y, int width, int height) {
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
+    public SpaceShip() {
+        this.x = 900;
+        this.y = 1000;
+        this.width = 50;
+        this.height = 50;
+        //this.speed = speed;
+        //this.health = health;
+        //this.ammunition = ammunition;
+        this.bounds = new Rectangle(x, y, width, height);
+
+        ImageIcon imageSpaceShipSource = new ImageIcon("Assets/SpaceShip.png");
+        imageSpaceShip = imageSpaceShipSource.getImage();
     }
 
     public int getX() {
@@ -25,8 +35,9 @@ public class SpaceShip {
     }
 
     public void setX(int x) {
-        if (x < 725 && x > 25) {
+        if (x < 1390 && x > 480) {
             this.x = x;
+            bounds.setLocation(x, y);
         }
     }
 
@@ -43,7 +54,7 @@ public class SpaceShip {
     }
 
     public Projectile fire() {
-        return new Projectile(this.x + this.width / 2, this.y, "UP");
+        return new Projectile(this.x + this.width / 2, this.y, "UP", false);
     }
 
     public void collectDebris() {
@@ -54,8 +65,13 @@ public class SpaceShip {
 
     }
 
-    public void draw(Graphics g) {
-        g.setColor(Color.RED);
-        g.fillRect(x, y, width, height);
+    public void draw(Graphics g) {  
+        g.drawImage(imageSpaceShip, this.x-20, this.y, null);
+        g.setColor(Color.BLUE);
+        g.drawRect(this.x, this.y, width, height);
+    }
+
+    public boolean collisionDetection(Projectile p) {
+        return this.bounds.intersects(p.bounds);
     }
 }
