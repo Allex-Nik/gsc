@@ -2,6 +2,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.*;
@@ -16,13 +17,10 @@ public class MainGameScreen extends JPanel {
     int score;
     private int AMUNITION = 100;
     private int HEALTH = 100;
-    private int TIME = 300;
+    private int TIME = 60;
     private int minutes = TIME / 60;
     private int seconds = TIME % 60;
     Timer gameLoop;
-
-    private int ammunition = 100;
-    private int health = 100;
   
     private SpaceShip spaceShip;
     private List<Alien> aliens = new ArrayList<>();
@@ -62,10 +60,10 @@ public class MainGameScreen extends JPanel {
         this.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                if (e.getButton() == MouseEvent.BUTTON1 && ammunition > 0) {
+                if (e.getButton() == MouseEvent.BUTTON1 && AMUNITION > 0) {
                     Projectile projectile = spaceShip.fire();
                     projectiles.add(projectile);
-                    ammunition -= 1;
+                    AMUNITION -= 1;
                 }
             }
         });
@@ -137,6 +135,21 @@ public class MainGameScreen extends JPanel {
         rightPanel.setBounds((SCREEN_WIDTH / 4) * 3, 0, SCREEN_WIDTH / 4, SCREEN_HEIGHT);
         this.add(rightPanel);
 
+        frame.addKeyListener(new KeyListener() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {;
+                    System.out.println("Escape pressed");
+                    System.exit(0);
+                }
+            }
+
+            @Override
+            public void keyTyped(KeyEvent e) {}
+
+            @Override
+            public void keyReleased(KeyEvent e) {}
+        });
     }
 
     @Override
@@ -158,8 +171,8 @@ public class MainGameScreen extends JPanel {
         g.setFont(new Font("Serif", Font.BOLD, 14));
         g.drawString("Amunition : " + AMUNITION, (SCREEN_WIDTH / 4 + 10), 15);
         g.drawString("Health: " + HEALTH, (SCREEN_WIDTH / 4 + 10), 40);
-        g.drawString(String.format("Time left: %02d:%02d", minutes, seconds), (SCREEN_WIDTH / 4 + 10), 65);
-        g.drawString("Score: " + score, (SCREEN_WIDTH / 4 + 10), 70);
+        g.drawString("Score: " + score, (SCREEN_WIDTH / 4 + 10), 65);
+        g.drawString(String.format("Time left: %02d:%02d", minutes, seconds), (SCREEN_WIDTH / 4 + 10), 100);
     }
 
     
@@ -206,13 +219,15 @@ public class MainGameScreen extends JPanel {
         for (Debris d : debris) {
             if (d.collisionDetection(spaceShip)) {
                 debrisToRemove.add(d);
-                ammunition += d.getPoints();
+                AMUNITION += d.getPoints();
             }
         }
 
         projectiles.removeAll(projectilesToRemove);
         aliens.removeAll(aliensToRemove);
         debris.removeAll(debrisToRemove);
+
+        
     }
 
 

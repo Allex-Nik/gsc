@@ -1,6 +1,8 @@
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseAdapter;
+import java.awt.event.KeyListener;
+import java.awt.event.KeyEvent;
 
 import javax.swing.*;
 
@@ -11,6 +13,8 @@ public class FinalScreen {
     Color titleColor = Color.BLUE;
     Color messageColor = Color.BLUE;
     Color buttonColor = Color.BLUE;
+    final int SCREEN_WIDTH = 1920;
+    final int SCREEN_HEIGHT = 1080;
 
 
     FinalScreen(boolean isVictory) {
@@ -23,9 +27,11 @@ public class FinalScreen {
 
         JFrame frame = new JFrame("Final Screen");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(Toolkit.getDefaultToolkit().getScreenSize());
-        frame.setVisible(true);
+        frame.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        frame.setUndecorated(true);
+        frame.setVisible(true);
+
 
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
@@ -74,6 +80,22 @@ public class FinalScreen {
                 restart.setForeground(buttonColor);
                 buttonPanel.repaint();
             }
+        });
+
+        frame.addKeyListener(new KeyListener() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {;
+                    System.out.println("Escape pressed");
+                    System.exit(0);
+                }
+            }
+
+            @Override
+            public void keyTyped(KeyEvent e) {}
+
+            @Override
+            public void keyReleased(KeyEvent e) {}
         });
     }
 }
