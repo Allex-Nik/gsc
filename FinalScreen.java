@@ -119,7 +119,6 @@ public class FinalScreen {
             public void keyPressed(KeyEvent e) {
                 // Closes the game if ESCAPE is pressed.
                 if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-                    System.out.println("Escape pressed");
                     System.exit(0);
                 }
             }

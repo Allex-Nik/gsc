@@ -62,7 +62,6 @@ public class HomeScreen extends JPanel {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-                    System.out.println("Escape pressed");
                     System.exit(0);
                 }
             }
@@ -86,7 +85,6 @@ public class HomeScreen extends JPanel {
             // Changes the button's color when the mouse enters.
             @Override
             public void mouseEntered(java.awt.event.MouseEvent e) {
-                System.out.println("Mouse entered");
                 buttonColor = Color.RED;
                 start.setForeground(buttonColor);
                 buttonPanel.repaint();
@@ -95,7 +93,6 @@ public class HomeScreen extends JPanel {
             // Returns the initial color of the button when the mouse exits.
             @Override
             public void mouseExited(java.awt.event.MouseEvent e) {
-                System.out.println("Mouse exited");
                 buttonColor = Color.BLUE;
                 start.setForeground(buttonColor);
                 buttonPanel.repaint();

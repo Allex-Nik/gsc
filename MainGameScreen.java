@@ -90,7 +90,7 @@ public class MainGameScreen extends JPanel {
         });
 
         // Sets the frequency with which the aliens shoot.
-        Timer alienShootTimer = new Timer(1000, new ActionListener() {
+        Timer alienShootTimer = new Timer(3000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 for (Alien a : aliens) {
@@ -170,7 +170,6 @@ public class MainGameScreen extends JPanel {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-                    System.out.println("Escape pressed");
                     System.exit(0);
                 }
             }
