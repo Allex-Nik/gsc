@@ -21,7 +21,7 @@ public class MainGameScreen extends JPanel {
     private static final int SCREEN_WIDTH = 1920;
     private static final int SCREEN_HEIGHT = 1080;
     public int score;
-    private int amunition = 100;
+    private int amunition = 10;
     private int health = 100;
     private int time = 120;
     private int minutes = time / 60;

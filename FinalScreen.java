@@ -4,6 +4,12 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * Represents the final screen of the game, showing the player's score
@@ -18,6 +24,7 @@ public class FinalScreen {
     private String maxScore = "The highest score: ";
     private String feedback;
     private Color buttonColor = Color.BLUE;
+    private ArrayList<Integer> pastScores = new ArrayList<>();
     
     /**
      * Constructs the final screen of the game.
@@ -29,6 +36,40 @@ public class FinalScreen {
         // Sets the feedback message based on the player's result.
         if (isVictory) {
             feedback = "Congratulations! You won.";
+
+            // Writes the score from the last game to the file.
+            try {
+                FileWriter writer = new FileWriter("scores.txt", true);
+                writer.write(Integer.toString(score) + "\n");
+                writer.close();
+                System.out.println("Successfully wrote to the file.");
+            } catch (Exception e) {
+                System.out.println("An error occurred.");
+                e.printStackTrace();
+            }
+            // Reads all scores from the file.
+            try {
+                File myObj = new File("scores.txt");
+                Scanner myReader = new Scanner(myObj);
+                while (myReader.hasNextLine()) {
+                    String data = myReader.nextLine();
+                    pastScores.add(Integer.parseInt(data));
+                }
+                myReader.close();
+            } catch (FileNotFoundException e) {
+                System.out.println("An error occurred.");
+                e.printStackTrace();
+            }
+
+            // Finds the maximum score.
+            int max = 0;
+            for (int i = 0; i < pastScores.size(); i++) {
+                if (pastScores.get(i) > max) {
+                    max = pastScores.get(i);
+                }
+            }
+            maxScore += max;
+
         } else {
             feedback = "Sorry, you lost. Try again.";
         }
