@@ -1,37 +1,46 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyListener;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import javax.swing.*;
-import javax.tools.Tool;
-
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
+import javax.swing.*;
 
+/**
+ * Represents the main game screen. 
+ * Contains the primary game interface where all gameplay takes place.
+ * Handles the rendering and logic of the spaceship, aliens, debris, and projectiles.
+ */
 public class MainGameScreen extends JPanel {
 
-    int score;
-    private int AMUNITION = 100;
-    private int HEALTH = 100;
-    private int TIME = 60;
-    private int minutes = TIME / 60;
-    private int seconds = TIME % 60;
-    Timer gameLoop;
-  
+    // Sets up the game metrics.
+    private static final int SCREEN_WIDTH = 1920;
+    private static final int SCREEN_HEIGHT = 1080;
+    public int score;
+    private int amunition = 100;
+    private int health = 100;
+    private int time = 120;
+    private int minutes = time / 60;
+    private int seconds = time % 60;
+    private Timer gameLoop;
+
+    // Game objects.
     private SpaceShip spaceShip;
     private List<Alien> aliens = new ArrayList<>();
     private List<Debris> debris = new ArrayList<>();
     private List<Projectile> projectiles = new ArrayList<>();
-    private final int SCREEN_WIDTH = 1920;
-    private final int SCREEN_HEIGHT = 1080;
-    JFrame frame = new JFrame();
+    private JFrame frame = new JFrame();
 
     public Image backgroundImage;
 
+    /**
+     * Constructs the main game screen.
+     * Initializes the game setup, game mechanics and event listeners.
+     */
     public MainGameScreen() {
         spaceShip = new SpaceShip();
 
@@ -43,32 +52,45 @@ public class MainGameScreen extends JPanel {
 
         this.setOpaque(true);
         this.setBackground(Color.BLACK);
+        
         Random random = new Random();
 
+        // Sets up the image of the background.
         ImageIcon backgroundImageSource = new ImageIcon("Assets/Space Background.png");
         backgroundImage = backgroundImageSource.getImage();
 
         this.addMouseMotionListener(new MouseAdapter() {
+            // Enables movement of the ship when the mouse button is not pressed.
             @Override
             public void mouseMoved(MouseEvent e) {
                 int mouseX = e.getX();
                 spaceShip.setX(mouseX - spaceShip.getWidth() / 2);
                 repaint();
             }
+
+            // Enables movement of the ship when the mouse button is pressed.
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                int mouseX = e.getX();
+                spaceShip.setX(mouseX - spaceShip.getWidth() / 2);
+                repaint();
+            }
         });
 
+        // Enables firing projectiles from the ship and subtracting of the amunition.
         this.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                if (e.getButton() == MouseEvent.BUTTON1 && AMUNITION > 0) {
+                if (e.getButton() == MouseEvent.BUTTON1 && amunition > 0) {
                     Projectile projectile = spaceShip.fire();
                     projectiles.add(projectile);
-                    AMUNITION -= 1;
+                    amunition -= 1;
                 }
             }
         });
 
-        Timer alienShootTimer = new Timer(5000, new ActionListener() {
+        // Sets the frequency with which the aliens shoot.
+        Timer alienShootTimer = new Timer(1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 for (Alien a : aliens) {
@@ -79,13 +101,15 @@ public class MainGameScreen extends JPanel {
         });
         alienShootTimer.start();
 
+        // The main loop. Updates all the objects during the game.
+        // Checks if the time is expired or if the health is 0.
         gameLoop = new Timer((1000 / 60), new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (HEALTH <= 0 || TIME <= 0) {
+                if (health <= 0 || time <= 0) {
                     gameLoop.stop();
                     frame.dispose();
-                    new FinalScreen(HEALTH > 0);
+                    new FinalScreen(health > 0, score);
                 }
                 updateDebris();
                 updateAliens();
@@ -95,6 +119,7 @@ public class MainGameScreen extends JPanel {
         });
         gameLoop.start();
 
+        // Sets the frequency with which the debris appear.
         Timer debrisTimer = new Timer(2000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -104,27 +129,32 @@ public class MainGameScreen extends JPanel {
         });
         debrisTimer.start();
 
-        Timer aliensTimer = new Timer(10000, new ActionListener() {
+        // Sets the frequency with which the aliens appear. 
+        // Randomly determines their direction (LEFT or RIGHT).
+        Timer aliensTimer = new Timer(4000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String direction = (random.nextInt(2) == 0) ? "LEFT" : "RIGHT";
-                int startX = (direction.equals("LEFT") ? (SCREEN_WIDTH / 4) - 51 : ((SCREEN_WIDTH * 3) / 4) + 51);
+                int startX = (direction.equals("LEFT") 
+                    ? (SCREEN_WIDTH / 4) - 51 : ((SCREEN_WIDTH * 3) / 4) + 51);
                 Alien alien = new Alien(startX, random.nextInt(100, 300), direction);
                 aliens.add(alien);
             }
         });
         aliensTimer.start();
 
+        // Sets up the timer for the game on the format mm:ss.
         Timer gameTimeTimer = new Timer(1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                TIME--;
-                minutes = TIME / 60;
-                seconds = TIME % 60;
+                time--;
+                minutes = time / 60;
+                seconds = time % 60;
             }
         });
         gameTimeTimer.start();
 
+        // Sets up the black panels on the both sides to restrict the field for the game.
         JPanel leftPanel = new JPanel();
         leftPanel.setBackground(Color.BLACK);
         leftPanel.setBounds(0, 0, SCREEN_WIDTH / 4, SCREEN_HEIGHT);
@@ -135,27 +165,22 @@ public class MainGameScreen extends JPanel {
         rightPanel.setBounds((SCREEN_WIDTH / 4) * 3, 0, SCREEN_WIDTH / 4, SCREEN_HEIGHT);
         this.add(rightPanel);
 
-        frame.addKeyListener(new KeyListener() {
+        // Enables to quit the game when Escape if pressed.
+        frame.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {;
+                if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
                     System.out.println("Escape pressed");
                     System.exit(0);
                 }
             }
-
-            @Override
-            public void keyTyped(KeyEvent e) {}
-
-            @Override
-            public void keyReleased(KeyEvent e) {}
         });
     }
 
+    // Draws the elements of the game that are needed.
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-
         g.drawImage(backgroundImage, 0, 0, null);
         spaceShip.draw(g);
         for (Projectile p : projectiles) {
@@ -169,13 +194,16 @@ public class MainGameScreen extends JPanel {
         }
         g.setColor(Color.WHITE);
         g.setFont(new Font("Serif", Font.BOLD, 14));
-        g.drawString("Amunition : " + AMUNITION, (SCREEN_WIDTH / 4 + 10), 15);
-        g.drawString("Health: " + HEALTH, (SCREEN_WIDTH / 4 + 10), 40);
+        g.drawString("Amunition : " + amunition, (SCREEN_WIDTH / 4 + 10), 15);
+        g.drawString("Health: " + health, (SCREEN_WIDTH / 4 + 10), 40);
         g.drawString("Score: " + score, (SCREEN_WIDTH / 4 + 10), 65);
-        g.drawString(String.format("Time left: %02d:%02d", minutes, seconds), (SCREEN_WIDTH / 4 + 10), 100);
+        g.drawString(String.format("Time left: %02d:%02d", minutes, seconds), 
+            (SCREEN_WIDTH / 4 + 10), 100);
     }
 
-    
+    /**
+     * Updates the position of all the projectiles on the screen.
+     */
     public void updateProjectiles() {
         for (Projectile p : projectiles) {
             p.move();
@@ -183,6 +211,9 @@ public class MainGameScreen extends JPanel {
         repaint();
     }
 
+    /**
+     * Updates the position of all the pieces of debris on the screen.
+     */
     public void updateDebris() {
         for (Debris d : debris) {
             d.move();
@@ -190,6 +221,9 @@ public class MainGameScreen extends JPanel {
         repaint();
     }
 
+    /**
+     * Updates the position of all the aliens on the screen.
+     */
     public void updateAliens() {
         for (Alien a : aliens) {
             a.move();
@@ -197,16 +231,23 @@ public class MainGameScreen extends JPanel {
         repaint();
     }
 
+    /**
+     * Handles hit detection logic between game objects.
+     */
     public void hitDetection() {
+        // Creates lists to collect the objects that are needed to be removed.
         List<Projectile> projectilesToRemove = new ArrayList<>();
         List<Alien> aliensToRemove = new ArrayList<>();
         List<Debris> debrisToRemove = new ArrayList<>();
         
+        // If a projectile hits the ship, points of health are subtracted.
         for (Projectile p : projectiles) {
             if (spaceShip.collisionDetection(p) && p.direction.equals("DOWN")) {
                 projectilesToRemove.add(p);
-                HEALTH -= 20;
+                health -= 20;
             }
+
+            // If a projectile hits an alien, the score is increased.
             for (Alien a : aliens) {
                 if (a.collisionDetection(p) && p.direction.equals("UP")) {
                     projectilesToRemove.add(p);
@@ -216,13 +257,15 @@ public class MainGameScreen extends JPanel {
             }
         }
         
+        // If the ship collects debris, the amunition is increased.
         for (Debris d : debris) {
             if (d.collisionDetection(spaceShip)) {
                 debrisToRemove.add(d);
-                AMUNITION += d.getPoints();
+                amunition += d.getPoints();
             }
         }
 
+        // Removes collided projectiles and aliens.
         projectiles.removeAll(projectilesToRemove);
         aliens.removeAll(aliensToRemove);
         debris.removeAll(debrisToRemove);
@@ -230,11 +273,9 @@ public class MainGameScreen extends JPanel {
         
     }
 
-
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             new MainGameScreen();
         });
     }
 }
-

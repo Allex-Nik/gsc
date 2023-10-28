@@ -1,23 +1,31 @@
 import java.awt.*;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseListener;
+import java.awt.event.MouseAdapter;
 import javax.swing.*;
 
+/**
+ * Represents the home screen of the game, containing the "Start" button.
+ */
 public class HomeScreen extends JPanel {
-    String gameName = "Galactic Salvage Crew";
-    Color backgroundColor = new Color(102, 98, 98);
-    Color titleColor = Color.BLUE;
-    Color buttonColor = Color.BLUE;
+    private static final String GAME_NAME = "Galactic Salvage Crew";
+    private static final Color BACKGROUND_COLOR = new Color(102, 98, 98);
+    private static final Color TITLE_COLOR = Color.BLUE;
+    private static final int SCREEN_WIDTH = 1920;
+    private static final int SCREEN_HEIGHT = 1080;
+    private Color buttonColor = Color.BLUE;
     public boolean startFlag = false;
-    Image imageSpaceShip;
-    final int SCREEN_WIDTH = 1920;
-    final int SCREEN_HEIGHT = 1080;
-
+    public Image imageSpaceShip;
+    
+    /**
+     * Constructs the home screen of the game.
+     */
     HomeScreen() {
+        // Loads the spaceship's image.
         ImageIcon imageSpaceShipSource = new ImageIcon("Assets/SpaceShip.png");
         imageSpaceShip = imageSpaceShipSource.getImage();
 
+        // Sets up the frame.
         JFrame frame = new JFrame("Home Screen");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -25,49 +33,45 @@ public class HomeScreen extends JPanel {
         frame.setVisible(true);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
+        // Sets up the panel.
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
-        panel.setBackground(backgroundColor);
+        panel.setBackground(BACKGROUND_COLOR);
         frame.add(panel);
 
-        JLabel title = new JLabel(gameName, JLabel.CENTER);
+        // Sets up the title label.
+        JLabel title = new JLabel(GAME_NAME, JLabel.CENTER);
         title.setFont(new Font("Serif", Font.BOLD, 40));
-        title.setForeground(titleColor);
+        title.setForeground(TITLE_COLOR);
         panel.add(title, BorderLayout.CENTER);
 
+        // Sets up the button panel.
         JPanel buttonPanel = new JPanel();
         buttonPanel.setBounds(100, 100, 100, 100);;
-        buttonPanel.setBackground(backgroundColor);
+        buttonPanel.setBackground(BACKGROUND_COLOR);
         panel.add(buttonPanel, BorderLayout.SOUTH);
 
+        // Sets up the "Start" button.
         JLabel start = new JLabel("Start", JLabel.CENTER);
         start.setFont(new Font("Serif", Font.BOLD, 60));
         start.setForeground(buttonColor);
         buttonPanel.add(start);
 
-        frame.addKeyListener(new KeyListener() {
+        // Adds key listener to the frame to detect ESCAPE press.
+        frame.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {;
+                if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
                     System.out.println("Escape pressed");
                     System.exit(0);
                 }
             }
-
-            @Override
-            public void keyTyped(KeyEvent e) {}
-
-            @Override
-            public void keyReleased(KeyEvent e) {}
         });
         
-
-        start.addMouseListener(new MouseListener() {
-            @Override
-            public void mouseClicked(java.awt.event.MouseEvent e) {
-                //TODO: Add code to start game
-            }
-
+        // Adds mouse listener to the "start" button.
+        start.addMouseListener(new MouseAdapter() {
+           
+            // Starts the game if the mouse is pressed.
             @Override
             public void mousePressed(java.awt.event.MouseEvent e) {
                 if (!startFlag) {
@@ -79,9 +83,7 @@ public class HomeScreen extends JPanel {
                 }
             }
 
-            @Override
-            public void mouseReleased(java.awt.event.MouseEvent e) {}
-
+            // Changes the button's color when the mouse enters.
             @Override
             public void mouseEntered(java.awt.event.MouseEvent e) {
                 System.out.println("Mouse entered");
@@ -90,23 +92,21 @@ public class HomeScreen extends JPanel {
                 buttonPanel.repaint();
             }
 
+            // Returns the initial color of the button when the mouse exits.
             @Override
             public void mouseExited(java.awt.event.MouseEvent e) {
                 System.out.println("Mouse exited");
                 buttonColor = Color.BLUE;
                 start.setForeground(buttonColor);
                 buttonPanel.repaint();
-
             }
-
         });
-
     }
 
     public static void main(String[] args) {
+        // Launches the HomeScreen.
         SwingUtilities.invokeLater(() -> {
-            HomeScreen homeScreen = new HomeScreen();
+            new HomeScreen();
         });
     }
-    
 }

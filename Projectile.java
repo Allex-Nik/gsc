@@ -1,69 +1,71 @@
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
 import javax.swing.ImageIcon;
 
+/**
+ * Represents the class of projectiles that can be fired by either the ship or an alien.
+ * A projectile has coordinates, direction, speed, and an associated image.
+ */
 public class Projectile {
-    public int x;
-    public int y;
-    public int width;
-    public int height;
-    private int speedShipsProjectiles = 15;
-    private int speedAlienProjectiles = 6;
-    public String direction;
-    Rectangle bounds;
+    private static final int SPEED_SHIPS_PROJECTILES = 15; // Speed of ship's projectiles.
+    private static final int SPEED_ALIENS_PROJECTILES = 6; // Speed of alien's projectiles.
+    private static final int PROJECTILE_WIDTH = 5; // Width of a projectile.
+    private static final int PROJECTILE_HEIGHT = 10; // Height of a projectile.
+    private int x; // Horizontal position of a projectile.
+    private int y; // Vertical position of a projectile.
+    private Image imageAlienProjectile; // Alien's projectile image.
+    private Image imageShipProjectile; // Ship's projectile image.
+    public String direction; // Direction of a projectile ("UP" or "DOWN").
+    public Rectangle bounds; // Rectangle to determine boundaries of the projectile.
+    private boolean laserFlag; // true: alien laser, false: ship laser.
 
-    Image imageAlienProjectile;
-    Image imageShipProjectile;
-
-    boolean laserFlag; // true: alien laser, false: ship laser
-
+    /**
+     * Constructs new projectiles.
+     * @param startX Initial horizontal position.
+     * @param startY Initial vertical position.
+     * @param direction Movement direction of the projectile ("UP" or "DOWN").
+     * @param laserFlag Projectile type flag: true - alien, false - ship.
+     */
     public Projectile(int startX, int startY, String direction, boolean laserFlag) {
         this.x = startX;
         this.y = startY;
         this.direction = direction;
-        this.width = 5;
-        this.height = 10;
-        this.bounds = new Rectangle(x, y, width, height);
+        this.bounds = new Rectangle(x, y, PROJECTILE_WIDTH, PROJECTILE_HEIGHT);
         this.laserFlag = laserFlag;
 
+        // Sets up the image of aliens' projectiles.
         imageAlienProjectile = new ImageIcon("Assets/AlienLaser.png").getImage();
-        imageAlienProjectile = imageAlienProjectile.getScaledInstance(width, height, Image.SCALE_DEFAULT);
+        imageAlienProjectile = imageAlienProjectile.getScaledInstance(
+            PROJECTILE_WIDTH, PROJECTILE_HEIGHT, Image.SCALE_DEFAULT);
 
+        // Sets up the image of the ship's projectiles.
         imageShipProjectile = new ImageIcon("Assets/SpaceShipLaser.png").getImage();
-        imageShipProjectile = imageShipProjectile.getScaledInstance(width, height, Image.SCALE_DEFAULT);
+        imageShipProjectile = imageShipProjectile.getScaledInstance(
+            PROJECTILE_WIDTH, PROJECTILE_HEIGHT, Image.SCALE_DEFAULT);
     }
 
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public void setY() {
-        this.y = y;
-    }
-
+    /**
+     * Moves the projectile based on its direction and speed.
+     */
     public void move() {
         if (direction.equals("DOWN")) {
-            y += speedAlienProjectiles;
+            y += SPEED_ALIENS_PROJECTILES;
         } else if (direction.equals("UP")) {
-            y -= speedShipsProjectiles;
+            y -= SPEED_SHIPS_PROJECTILES;
         }
         bounds.setLocation(x, y);
     }
     
-
+    /**
+     * Draws the projectile on the screen using the provided graphics context.
+     * @param g Graphics context used for drawing.
+     */
     public void draw(Graphics g) {
         if (laserFlag) {
             g.drawImage(imageAlienProjectile, x, y, null);
         } else {
             g.drawImage(imageShipProjectile, x, y, null);
         }
-        //g.setColor(Color.BLUE);
-        //g.fillRect(x, y, width, height);
     }
 }
