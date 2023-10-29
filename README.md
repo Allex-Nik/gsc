@@ -83,7 +83,25 @@ Another approach is using the .git commands... *Alex fill this in*
 > You can see all this for yourselves in the repo. Merged branches were kept, so that they can be viewed.
 
 ### 2. Text-file implementation in Java
-///TO BE FILLED IN
+
+We chose this topic because it is vital in program design as it allows us to store information after the instance of the program is closed. Furthermore this topic was a good candidate because it wasn't discussed in class.
+
+*Learning goals*
+We wanted to learn how to create, write and read text-files in java.
+
+In the end we implement two out of the three (spec. in FinalScreen.java);
+**1. Writing into a text-file**
+Using java.io.FileWriter one can open the file in write mode with appending being enabled or not (append = write at the end of the file rather than beginning.
+We implemented it in exception handling in case there was a problem with the file.
+*Purpose:* We used it to store the final score after each game.
+
+**2.Read a text-file**
+Using java.io.File one can open a file and then using java.util.Scanner read it line by line.
+We implemented it in exception handling in case the file could not be found.
+*Purpose:* We read all the previous scores to determine the highest score achieved.
+
+**Note**
+We didn't use file creation as it was much easier to just have a file already present in **gsc**.
 
 ## Features from the Backlog
 ### Home Screen ✔
@@ -95,9 +113,19 @@ If there was time left, we would have added it but as you can see there wasn't.
 The code for the title screen is in HomeScreen.java
 
 ### Rendering Main Game Screen ✔
-Most challenging *finish.................................................*
+This feature was the largest, as it contained;
+- Timer, health, score and ammo
+- Rendering background and black bars at sides od screen
+- Rendering of the spaceship, debris, aliens and projectiles.
+- Key and mouse detection for shooting.
+- Shooting mechanics
+- The actual use of hit-detection and removing of objects that collided.
+
+Our goal was to bring everything together on this Main Game Screen, and we think we achieved this.
+***One challenge that arose:*** as we wanted to specify the placement of all objects, the scaling broke. This is demonstrated when one uses a 1080p screen with Windows scaling changed to anything other than 100%. We tried to fix this using '''java System.setProperty()''' but it didn't work and we no longer had time to do more research.
 
 ### Movement of the Space Ship ✔
+TODO
 ### Movement of Debris ✔
 At first the development of debris would have been quite a challenge if we had gone for the development of the tractor beam, but we decided against it. Therefore the development of the debris was quite straightforward.
 
@@ -112,8 +140,27 @@ Challenge: The implementation should have insured that the debris would end up s
 
 The code can be found in Debris.java
 ### Shooting Mechanics ✔
+TODO
 ### Hit-Detection ✔
+This feature was one of the most challenging to implement.
+Our goal was to have complete collision detection between debris and the spaceship, projectiles and spaceship and projectiles and aliens. 
+There were two iterations to this feature:
+
+**1. Building our own collision detection**
+This was done using our own loop to check whether the shape coordinates of each object were inside or on the edge of one another (as was in the Assignment 1 for Programming), but this approached proved to be inefficient and didn't scale well. So we had to redo it when were were adding sprites.
+
+**2. Using .awt shapes such as Rectangle and Ellipse2D**
+After research we came across the shape of .awt, which has the perfect method for collision detection which was .intersects(). We then implemented Rectangle onto Aliens and the Space Ship and Ellipse2D onto Debris.
+[Include image of bounds]
+
+***Though one challenge arose***; the Rectangle shape didn't fit the shape of the spaceship perfectly. We tried to fix this by using the Polygon shape specifying 3 points of the rectangular shape of the spaceship, but it created a lot of issues.
+[Include image of the bounds of the spaceship]
+So in the end we decided to just leave the collision bounds highlighted for the spaceship, so that the user can tell where it is.
+
+Implementation of this feature can be found in Debris.java, SpaceShip.java, Projectile.java, Alien.java and MainGameScreen.java.
+
 ### Game-Over/Victory Screen ✔
+TODO
 ### Custom sprites for aliens/debris/ship ✔
 Our goal was to have a game that didn't consist of only shapes but had proper images for all entities and the background.
 
