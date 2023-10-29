@@ -89,7 +89,8 @@ We also used the GitHub web interface to merge branches and resolve conflicts.
     -   alternative_collision_detection - Sprites were added as a proper background. The collision detection had to be reworked so that it worked with sprites and scaled.
     -   feature/final_screen - development of the game-over/victory screen
 5.  All were merged into GSC_v2, where finally the text file implementation of score saving was implemented, and the code was cleaned up.
-6.  GSC_v2 was merged with main.
+6.  GSC_v2 was merged in GSC_v3 where final adjustments and bug fixes were made. Plus a detailed README was added.
+7.  GSC_v3 was merged with main.
 
 > You can see all this for yourselves in the repo. Merged branches were kept so that they can be viewed.
 
