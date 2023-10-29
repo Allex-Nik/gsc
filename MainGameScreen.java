@@ -272,9 +272,4 @@ public class MainGameScreen extends JPanel {
         
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            new MainGameScreen();
-        });
-    }
 }

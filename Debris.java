@@ -71,7 +71,7 @@ public class Debris {
      * Draws the debris on the screen.
      * @param g object of Graphics that enables drawing.
      */
-    public void draw(Graphics g){
+    public void draw(Graphics g) {
         g.drawImage(imageDebris, x, y, null);
     }
 

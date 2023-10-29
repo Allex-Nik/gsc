@@ -43,7 +43,7 @@ public class FinalScreen extends JPanel {
                 writer.close();
                 System.out.println("Successfully wrote to the file.");
             } catch (Exception e) {
-                System.out.println("An error occurred.");
+                System.out.println("An error occurred while writing the file.");
                 e.printStackTrace();
             }
             // Reads all scores from the file.
@@ -56,7 +56,7 @@ public class FinalScreen extends JPanel {
                 }
                 myReader.close();
             } catch (FileNotFoundException e) {
-                System.out.println("An error occurred.");
+                System.out.println("The file was not found");
                 e.printStackTrace();
             }
 
@@ -88,25 +88,27 @@ public class FinalScreen extends JPanel {
         frame.add(panel);
 
         // Sets up the top panel to show the maximum score and the player's score.
-        JPanel topPanel = new JPanel(new BorderLayout());
-        topPanel.setBackground(BACKGROUND_COLOR);
+        if (isVictory) {
+            JPanel topPanel = new JPanel(new BorderLayout());
+            topPanel.setBackground(BACKGROUND_COLOR);
 
-        // Sets up the label to display the highest score.
-        JLabel highestScore = new JLabel(maxScore, JLabel.CENTER);
-        highestScore.setFont(new Font("Serif", Font.BOLD, 40));
-        highestScore.setForeground(TITLE_COLOR);
-        topPanel.add(highestScore, BorderLayout.EAST);
+            // Sets up the label to display the highest score.
+            JLabel highestScore = new JLabel(maxScore, JLabel.CENTER);
+            highestScore.setFont(new Font("Serif", Font.BOLD, 40));
+            highestScore.setForeground(TITLE_COLOR);
+            topPanel.add(highestScore, BorderLayout.EAST);
 
-        // Sets up the label to display the player's score.
-        String mark = "Score: " + score;
-        JLabel grade = new JLabel(mark, JLabel.CENTER);
-        grade.setFont(new Font("Serif", Font.BOLD, 40));
-        grade.setForeground(Color.BLUE);
-        topPanel.add(grade, BorderLayout.WEST);
+            // Sets up the label to display the player's score.
+            String mark = "Score: " + score;
+            JLabel grade = new JLabel(mark, JLabel.CENTER);
+            grade.setFont(new Font("Serif", Font.BOLD, 40));
+            grade.setForeground(Color.BLUE);
+            topPanel.add(grade, BorderLayout.WEST);
 
-        // Adds the top panel to the main panel.
-        panel.add(topPanel, BorderLayout.NORTH);
-
+            // Adds the top panel to the main panel.
+            panel.add(topPanel, BorderLayout.NORTH);
+        }
+        
         // Sets up the label to display feedback to the player
         JLabel message = new JLabel(feedback, JLabel.CENTER);
         message.setFont(new Font("Serif", Font.BOLD, 40));
