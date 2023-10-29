@@ -64,9 +64,7 @@ _Learning Goals_ We wanted to learn how to use Version Control to collaborate on
 
 ### Different Approaches
 
-One approach was using **GitHub Desktop**, an application made by GitHub. 
-[Include picture of UI here] 
-Through the application, you can select the specific repository and branch and "pull" and "push" code. Additionally, it allows you to view the changes made to the code before making a commit to the branch uploading your updated code. One of the largest benefits was that you have a specified folder where you can pull code and it can act as a "cache" for the branch you are currently working on.
+One approach was using **GitHub Desktop**, an application made by GitHub. Through the application, you can select the specific repository and branch and "pull" and "push" code. Additionally, it allows you to view the changes made to the code before making a commit to the branch uploading your updated code. One of the largest benefits was that you have a specified folder where you can pull code and it can act as a "cache" for the branch you are currently working on.
 
 Another approach is using the git commands in the terminal:
 
@@ -114,9 +112,7 @@ In the end, we implemented two out of the three (specified in FinalScreen.java):
 
 ### Home Screen ✔
 
-One of the first features implemented. 
-[Picture of home screen]
-Initially, our goal was to have an awesome animated title screen with graphics and all that jazz, but afterward, we decided against it as our time was better spent on developing other features. If there was time left, we would have added it, but as you can see, there wasn't.
+One of the first features implemented. Initially, our goal was to have an awesome animated title screen with graphics and all that jazz, but afterward, we decided against it as our time was better spent on developing other features. If there was time left, we would have added it, but as you can see, there wasn't.
 
 The code for the title screen is in HomeScreen.java.
 
@@ -136,7 +132,7 @@ Our goal was to bring everything together on this Main Game Screen, and we think
 ### Movement of the Space Ship ✔
 
 The Space Ship acts as the player's avatar in the game. Our goal was to enable the player to control the Space Ship by moving the mouse to the left and to the right. 
-[include an image of the ship] 
+
 Our approach to the implementation was as follows:
 
 1.  Represent the Space Ship by the "SpaceShip" class, which contains all the information about the Space Ship itself (size, position, image, bounds of the Space Ship for collision detection purposes, and boundaries of its movement).
@@ -151,7 +147,7 @@ Our approach to the implementation was as follows:
 At first, the development of debris would have been quite a challenge if we had gone for the development of the tractor beam, but we decided against it. Therefore, the development of the debris was quite straightforward.
 
 Our goal was to have space debris falling from the top of the screen towards the bottom where the player can touch the debris to collect it. 
-[include an image of debris] 
+
 Our implementation was:
 
 1.  Have the debris spawn at a random point on the line y = 0 (within the bounds of the playable screen).
@@ -178,11 +174,10 @@ This feature was one of the most challenging to implement. Our goal was to have 
 
 1.  Building our own collision detection: This was done using our loop to check whether the shape coordinates of each object were inside or on the edge of one another (as was in the Assignment 1 for Programming). However, this approach proved to be inefficient and didn't scale well. So we had to redo it when we were adding sprites.
     
-2.  Using .awt shapes such as Rectangle and Ellipse2D: After research, we came across the Shapes in .awt, which have the perfect method for collision detection, which was .intersects(). We then implemented Rectangle onto Aliens and the Space Ship and Ellipse2D onto Debris. [Include an image of bounds]
+2.  Using .awt shapes such as Rectangle and Ellipse2D: After research, we came across the Shapes in .awt, which have the perfect method for collision detection, which was .intersects(). We then implemented Rectangle onto Aliens and the Space Ship and Ellipse2D onto Debris.
     
 
 _**Though one challenge arose**_: the Rectangle shape didn't fit the shape of the spaceship perfectly. We tried to fix this by using the Polygon shape specifying 3 points of the triangular shape of the spaceship, but it created a lot of issues. 
-[Include an image of the bounds of the spaceship] 
 So, in the end, we decided to just leave the collision bounds highlighted for the spaceship so that the user can tell where it is.
 
 Implementation of this feature can be found in Debris.java, SpaceShip.java, Projectile.java, Alien.java, and MainGameScreen.java.
@@ -207,10 +202,9 @@ Our goal was to create a game that featured proper images for all entities and t
 
 The custom sprites for the spaceship, aliens, and debris were sourced from the package:
 
--   Space Shooter (Redux, including fonts and sounds) by Kenney Vleugels ([www.kenney.nl](http://www.kenney.nl/)) [Include sprite images]
+-   Space Shooter (Redux, including fonts and sounds) by Kenney Vleugels ([www.kenney.nl](http://www.kenney.nl/))
 
 The background was created by Samo, a member of our team. 
-[Include the background image]
 
 We added the sprites and background to the game using the ImageIcon class from Swing, following these steps:
 
@@ -230,8 +224,6 @@ Our implementation involved the following steps:
 1.  Writing the final score into the file scores.txt, utilizing the FileWriter class from java.io.
 2.  Reading all the scores into an ArrayList using the File class from java.io and the Scanner class from java.util.
 3.  Iterating over the ArrayList to determine the highest score, which was subsequently displayed.
-
-[Include a picture of the final screen with differing highest and current scores.]
 
 One challenge that arose was that the score was consistently overridden instead of being saved on the next line. After researching it, we realized that we had forgotten to set the FileWriter to append mode and forgot the "\n" at the end of the score.
 
