@@ -1,5 +1,6 @@
 
 # Galactic Salvage Crew
+Authors of the project: Aleksandr Nikolaev and Samo Martinka
 
 _**Please read this README on GitHub or in VS Code using Preview**_
 
