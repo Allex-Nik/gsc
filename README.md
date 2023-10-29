@@ -36,7 +36,7 @@ Open the folder  **gsc** folder in VS Code and run **HomeScreen.java**
 
 **!!Some things to be aware of!!**
 
- - Have your resolution set to 1920*1080 and the Windows Scaling set to 100%. A bug has been found quite late breaking the scaling of the Main Game Screen if one has windows scaled to anything other than 100%.
+ - Have your resolution set to 1920*1080 and the Windows Scaling set to 100% (right-click on the desktop -> Display settings -> Scale & Layout -> Scale -> 100%). A bug has been found quite late breaking the scaling of the Main Game Screen if one has windows scaled to anything other than 100%.
  - ...
 
 ## How to Play
