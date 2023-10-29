@@ -48,11 +48,11 @@ public class FinalScreen extends JPanel {
             }
             // Reads all scores from the file.
             try {
-                File myObj = new File("scores.txt");
-                Scanner myReader = new Scanner(myObj);
+                File scoreFile = new File("scores.txt");
+                Scanner myReader = new Scanner(scoreFile);
                 while (myReader.hasNextLine()) {
-                    String data = myReader.nextLine();
-                    pastScores.add(Integer.parseInt(data));
+                    String scoreString = myReader.nextLine();
+                    pastScores.add(Integer.parseInt(scoreString));
                 }
                 myReader.close();
             } catch (FileNotFoundException e) {

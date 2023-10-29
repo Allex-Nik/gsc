@@ -34,6 +34,8 @@ public class Alien {
         this.startY = startY;
         this.direction = direction;
         this.bounds = new Rectangle(x, startY, WIDTH, HEIGHT);
+
+        // Loads the alien's image.
         ImageIcon imageAlienSource = new ImageIcon("Assets/Alien.png");
         imageAlien = imageAlienSource.getImage();
         imageAlien = imageAlien.getScaledInstance(WIDTH, HEIGHT, Image.SCALE_DEFAULT);
