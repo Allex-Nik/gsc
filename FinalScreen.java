@@ -3,19 +3,18 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import javax.swing.*;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Scanner;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Scanner;
+import javax.swing.*;
 
 /**
  * Represents the final screen of the game, showing the player's score
  * and a message depending on whether they won or lost. Contains "restart" button.
  */
-public class FinalScreen {
+public class FinalScreen extends JPanel {
     private static final int SCREEN_WIDTH = 1920;
     private static final int SCREEN_HEIGHT = 1080;
     private static final Color BACKGROUND_COLOR = new Color(102, 98, 98);
